@@ -1,6 +1,10 @@
 ---
 name: page-driven-development
 description: Review and write React/Next.js code following Page Driven Development principles. Use when organizing components, making file structure decisions, or asked to "review structure", "organize code", "refactor components", or "follow PDD".
+license: MIT
+metadata:
+  author: fuxingloh
+  version: "1.0.0"
 ---
 
 # Page Driven Development (PDD)

@@ -11,9 +11,13 @@ description: |
 
 ## Overview
 
-`mnemonic/` is a numbered directory of design notes, decisions, tradeoffs, bug writeups, and reference checkout summaries. It is the project's long-term memory — load-bearing context that survives across conversations. `mnemonic/000-help.md` is the index.
+`mnemonic/` is a numbered directory of design notes, decisions, tradeoffs, bug writeups, and reference checkout summaries. It is the project's long-term memory — load-bearing context that survives across conversations. `♫/000` is the index.
 
-This is NOT documentation. It is internal working memory: why decisions were made, what was tried, what broke, what patterns were borrowed from where. A future session reading `mnemonic/042` should be able to reconstruct the reasoning without the original conversation.
+This is NOT documentation. It is internal working memory: why decisions were made, what was tried, what broke, what patterns were borrowed from where. A future session reading `♫/042` should be able to reconstruct the reasoning without the original conversation.
+
+### Reference notation
+
+Entries are referenced with the `♫/NNN` shorthand: `♫/000` is the index, `♫/100` is entry 100. Use it everywhere — prose, code comments, TODOs, other entries. The sigil is notation only; files on disk live at `mnemonic/NNN-short-slug.md` (`♫/000` → `mnemonic/000-help.md`). Because `♫/` is a single distinctive sigil, `grep -rn "♫/"` finds every memory reference in the repo, and `grep -rn "♫/042"` finds every inbound reference to one entry.
 
 ## When to Use
 
@@ -33,7 +37,7 @@ when nothing fits.
 **Do NOT create an entry for:**
 
 - Routine implementation (the code is the record)
-- Things already in CLAUDE.md (that's the public-facing guide)
+- Things already in the project's agent instructions file (that's the public-facing guide)
 - Ephemeral task details (use tasks or plans instead)
 - Git history (use `git log` / `git blame`)
 
@@ -41,7 +45,7 @@ when nothing fits.
 
 ### Step 1: Find the next number
 
-List the `mnemonic/` directory and take the highest existing number; the new entry gets the next sequential number. The filesystem is the source of truth — do NOT rely on `000-help.md` for numbering, as the index can lag behind the actual files.
+List the `mnemonic/` directory and take the highest existing number; the new entry gets the next sequential number. The filesystem is the source of truth — do NOT rely on `♫/000` for numbering, as the index can lag behind the actual files.
 
 ```bash
 ls mnemonic/ | sort | tail -5
@@ -69,7 +73,7 @@ What changed (if anything). Link to the relevant code.
 The generalizable lesson. What should a future session do differently because this entry exists?
 
 ## Related
-Cross-references to other mnemonic entries, CLAUDE.md sections, or external docs.
+Cross-references to other entries (`♫/NNN`), project docs, or external links.
 ```
 
 For **reference checkout summaries** (studying a sibling project):
@@ -110,11 +114,11 @@ If the fix is partial or there are follow-up items.
 
 ### Step 3: Update the index (only if relevant)
 
-`000-help.md` is a curated index, not a changelog — touch it sparsely. Most entries do NOT need an index update; the numbered file itself is the record. Update `mnemonic/000-help.md` only when the entry is load-bearing enough that a future session would miss it without the index:
+`♫/000` is a curated index, not a changelog — touch it sparsely. Most entries do NOT need an index update; the numbered file itself is the record. Update `♫/000` only when the entry is load-bearing enough that a future session would miss it without the index:
 
 1. **Add to the appropriate section** in "Working docs quick reference" only for entries that settle a decision, define architecture, or record a pattern future work depends on.
 
-2. **Add to "Open work"** if the entry describes something that still needs to be done. Use `- [ ]` checkbox format with a brief description and `(mnemonic/NNN)` reference.
+2. **Add to "Open work"** if the entry describes something that still needs to be done. Use `- [ ]` checkbox format with a brief description and `(♫/NNN)` reference.
 
 3. **Update "Key design decisions"** table if the entry records a numbered decision.
 
@@ -131,18 +135,22 @@ Append new information with a clear marker. Do not rewrite history — the origi
 
 ```markdown
 ## Update (2026-04-16)
-We later discovered X, which changes the recommendation. See mnemonic/NNN.
+We later discovered X, which changes the recommendation. See ♫/NNN.
 ```
+
+## Compacting
+
+Cleanup of duplicated, superseded, or outdated entries is handled by the `mnemonic-memory-compact` skill, which runs ONLY when the user explicitly asks (`/mnemonic-memory-compact`). If you notice stale entries, point them out and suggest a compact — do not clean up on your own, and never delete or renumber entries ad hoc.
 
 ## Cross-referencing
 
-- From code: inline `// See mnemonic/NNN` comments where the reasoning isn't visible at the call site.
-- From CLAUDE.md: reference by number in the relevant section.
-- From other mnemonic entries: `See mnemonic/NNN` in the Related section.
-- From agent frontmatter or TODOs: `(mnemonic/NNN)` parenthetical.
+- From code: inline `// See ♫/NNN` comments where the reasoning isn't visible at the call site.
+- From the project's agent instructions file: reference by `♫/NNN` in the relevant section.
+- From other mnemonic entries: `See ♫/NNN` in the Related section.
+- From frontmatter or TODOs: `(♫/NNN)` parenthetical.
 
 ## Reading Mnemonic (Before Work)
 
-Before writing a new feature or bugfix, list `mnemonic/` and scan filenames for related entries — the slugs are descriptive on purpose. Consult `000-help.md` only when it's relevant to the task (e.g., you need the open work list or the key decisions table); it is curated and may not mention every entry, so never treat it as the complete catalog.
+Before writing a new feature or bugfix, list `mnemonic/` and scan filenames for related entries — the slugs are descriptive on purpose. Consult `♫/000` only when it's relevant to the task (e.g., you need the open work list or the key decisions table); it is curated and may not mention every entry, so never treat it as the complete catalog.
 
 When uncertain about a prior decision, re-read the relevant file rather than reconstructing from memory or guessing.

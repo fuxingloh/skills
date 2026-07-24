@@ -4,7 +4,7 @@ description: |
   Create, update, and maintain numbered design notes in the mnemonic/ directory.
   Use when a design decision, tradeoff, bug finding, or architecture insight comes up
   in conversation that future sessions need to know about. Also use when the user says
-  "log this", "remember this", or "document this decision".
+  "fold", "fold this", "log this", "remember this", or "document this decision".
 ---
 
 # Mnemonic Memory
@@ -23,7 +23,12 @@ This is NOT documentation. It is internal working memory: why decisions were mad
 - A bug is diagnosed and the root cause is non-obvious
 - An architecture constraint is discovered (e.g., "Rocket ship rejects fuel needed")
 - A reference checkout is studied and patterns are extracted
-- The user says "log this", "remember this", or "write this down"
+- The user says "fold", "fold this", "log this", "remember this", or "write this down"
+
+**The "fold" keyword:** when the user says "fold" or "fold this", fold the insight into
+mnemonic memory. Prefer folding into an existing entry when one already covers the topic
+(append an update — see "Updating an Existing Entry"); create a new numbered entry only
+when nothing fits.
 
 **Do NOT create an entry for:**
 
@@ -36,7 +41,11 @@ This is NOT documentation. It is internal working memory: why decisions were mad
 
 ### Step 1: Find the next number
 
-Read `mnemonic/000-help.md` or list the directory to find the highest existing number. The new entry gets the next sequential number.
+List the `mnemonic/` directory and take the highest existing number; the new entry gets the next sequential number. The filesystem is the source of truth — do NOT rely on `000-help.md` for numbering, as the index can lag behind the actual files.
+
+```bash
+ls mnemonic/ | sort | tail -5
+```
 
 ### Step 2: Write the file
 
@@ -99,11 +108,11 @@ Secondary errors caused by the primary failure (red herrings).
 If the fix is partial or there are follow-up items.
 ```
 
-### Step 3: Update the index
+### Step 3: Update the index (only if relevant)
 
-Edit `mnemonic/000-help.md`:
+`000-help.md` is a curated index, not a changelog — touch it sparsely. Most entries do NOT need an index update; the numbered file itself is the record. Update `mnemonic/000-help.md` only when the entry is load-bearing enough that a future session would miss it without the index:
 
-1. **Add to the appropriate section** in "Working docs quick reference" — find the right category (Core architecture, Decisions and direction, Reference checkouts, Patterns to learn from, Env and config, Historical context).
+1. **Add to the appropriate section** in "Working docs quick reference" only for entries that settle a decision, define architecture, or record a pattern future work depends on.
 
 2. **Add to "Open work"** if the entry describes something that still needs to be done. Use `- [ ]` checkbox format with a brief description and `(mnemonic/NNN)` reference.
 
@@ -113,6 +122,8 @@ Format for the quick reference entry:
 ```
 - **NNN** — One-line summary (the key insight — not just a title, but what the reader learns)
 ```
+
+Routine bug writeups, minor findings, and incremental notes skip the index entirely.
 
 ## Updating an Existing Entry
 
@@ -132,6 +143,6 @@ We later discovered X, which changes the recommendation. See mnemonic/NNN.
 
 ## Reading Mnemonic (Before Work)
 
-Before writing a new feature or bugfix, scan `mnemonic/000-help.md` for related entries. The open work list shows what's planned. The key decisions index shows what's settled. The working docs quick reference tells you where to look for deep context on any topic.
+Before writing a new feature or bugfix, list `mnemonic/` and scan filenames for related entries — the slugs are descriptive on purpose. Consult `000-help.md` only when it's relevant to the task (e.g., you need the open work list or the key decisions table); it is curated and may not mention every entry, so never treat it as the complete catalog.
 
 When uncertain about a prior decision, re-read the relevant file rather than reconstructing from memory or guessing.
